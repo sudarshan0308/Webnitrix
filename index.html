@@ -5,32 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
     body { margin: 0; background: #000; overflow: hidden; font-family: 'Courier New', monospace; color: #0f0; }
-    #ui-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; transition: opacity 1s; }
     
+    /* Main UI Container */
+    #ui-container { 
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+        pointer-events: none; z-index: 10; transition: opacity 1s; 
+    }
+    
+    /* Left Side Stats */
     .stats { position: absolute; top: 20px; left: 20px; text-shadow: 0 0 10px #0f0; }
-
-    /* PASTE THE NEW CODE RIGHT HERE */
+    
+    /* Right Side Panel - Fixed Architect Alignment */
     #right-panel { 
-        position: absolute; 
-        top: 20px; 
-        right: 20px; 
-        text-align: right; 
-        border-right: 3px solid #0f0; 
-        padding-right: 15px; 
-        text-shadow: 0 0 8px #0f0;
-        width: auto; 
-        min-width: 250px; 
+        position: absolute; top: 20px; right: 20px; text-align: right; 
+        border-right: 3px solid #0f0; padding-right: 15px; text-shadow: 0 0 8px #0f0;
+        width: auto; min-width: 250px;
     }
-
     #right-panel h2 { 
-        margin: 5px 0; 
-        font-size: 1.1rem; 
-        white-space: nowrap; 
+        margin: 5px 0; font-size: 1.1rem; white-space: nowrap; 
     }
-    /* END OF NEW CODE */
 
+    /* Bottom Centered Labels - Fixed Alignment */
+    #alien-label { 
+        position: absolute; bottom: 120px; left: 0; width: 100%; 
+        text-align: center; font-size: 3.5rem; font-weight: bold; 
+        opacity: 0; transition: opacity 0.5s; pointer-events: none;
+    }
+    
+    #timer-label { 
+        position: absolute; bottom: 50px; left: 0; width: 100%; 
+        text-align: center; font-size: 1.2rem; opacity: 0; pointer-events: none;
+    }
+    
+    #prompt { 
+        position: absolute; bottom: 15%; left: 0; width: 100%; 
+        text-align: center; letter-spacing: 5px; font-weight: bold;
+        animation: breathe 2s infinite; pointer-events: none;
+    }
+    
+    /* Tactical Bars */
     .stat-bar-container { width: 100%; height: 8px; background: rgba(0, 255, 0, 0.1); border: 1px solid #0f0; margin: 5px 0 10px auto; overflow: hidden; }
-    /* ... rest of your CSS ... */
+    .stat-fill { height: 100%; background: #0f0; width: 0%; transition: width 0.4s ease-out; }
+    .label { font-size: 0.7rem; letter-spacing: 1px; margin-top: 5px; font-weight: bold; }
+
+    #flash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; opacity: 0; z-index: 100; pointer-events: none; }
+    
+    @keyframes breathe { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.8; } }
+    .flicker { animation: flash-red 0.15s infinite; }
+    @keyframes flash-red { 0% { opacity: 1; } 50% { opacity: 0.5; } }
 </style>
 </head>
 <body>
