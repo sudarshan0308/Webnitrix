@@ -1,74 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Webnitrix OS - Master Control</title>
+    <title>Webintrix OS - Master Control</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        body { margin: 0; background: #000; overflow: hidden; font-family: 'Courier New', monospace; color: #0f0; user-select: none; }
-        #ui-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+        body { margin: 0; background: #000; overflow: hidden; font-family: 'Courier New', monospace; }
+        #ui-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; color: #0f0; }
         
-        /* Top Left Stats */
+        /* Left Side Stats */
         .stats { position: absolute; top: 20px; left: 20px; text-shadow: 0 0 10px #0f0; }
         
-        /* Top Right Panel */
-        #right-panel { 
-            position: absolute; top: 20px; right: 20px; text-align: right; 
-            border-right: 3px solid #0f0; padding-right: 15px; text-shadow: 0 0 8px #0f0;
+        /* Right Side Creator Info - Fixed and Styled */
+        #creator-info { 
+            position: absolute; 
+            top: 20px; 
+            right: 20px; 
+            text-align: right; 
+            border-right: 3px solid #0f0; 
+            padding-right: 15px; 
+            text-shadow: 0 0 8px #0f0;
+            line-height: 1.2;
         }
-        #right-panel h2 { margin: 5px 0; font-size: 1.1rem; white-space: nowrap; }
+        #creator-info h2 { margin: 5px 0; font-size: 1.2rem; }
+        #creator-info p { margin: 2px 0; font-size: 0.8rem; letter-spacing: 1px; }
 
-        /* Tactical HUD */
-        .stat-bar-container { width: 180px; height: 8px; background: rgba(0, 255, 0, 0.1); border: 1px solid #0f0; margin: 5px 0 10px auto; overflow: hidden; }
-        .stat-fill { height: 100%; background: #0f0; width: 0%; transition: width 0.4s ease-out; }
-        .label { font-size: 0.7rem; letter-spacing: 1px; font-weight: bold; }
-
-        /* Bottom UI */
-        #alien-label { position: absolute; bottom: 150px; left: 0; width: 100%; text-align: center; font-size: 3rem; font-weight: bold; opacity: 0; transition: opacity 0.5s; }
-        #instruction-group { position: absolute; bottom: 10%; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px; animation: breathe 2s infinite; }
-        #timer-label { position: absolute; bottom: 40px; left: 0; width: 100%; text-align: center; font-size: 1.2rem; opacity: 0; }
+        #alien-label { position: absolute; bottom: 80px; width: 100%; text-align: center; font-size: 3rem; font-weight: bold; opacity: 0; transition: opacity 0.5s; }
+        #timer-label { position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 1.2rem; opacity: 0; }
+        #flash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; opacity: 0; z-index: 100; pointer-events: none; }
         
-        /* --- MOBILE REPAIR (No Overlap) --- */
-        @media (max-width: 600px) {
-            .stats { top: 10px; left: 10px; }
-            .stats h2 { font-size: 1rem; }
-            /* Move Architect to bottom right to avoid overlap with System Standby */
-            #right-panel { top: auto; bottom: 80px; right: 10px; border-right: 2px solid #0f0; }
-            #right-panel h2 { font-size: 0.8rem; }
-            #right-panel p { font-size: 0.6rem; margin: 2px 0; }
-            .stat-bar-container { width: 110px; }
-            #alien-label { font-size: 2rem; bottom: 180px; }
-            #instruction-group { bottom: 25%; }
-        }
-
-        @keyframes breathe { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.9; } }
+        /* Lowered Prompt */
+        #prompt { position: absolute; bottom: 10%; width: 100%; text-align: center; letter-spacing: 5px; animation: breathe 2s infinite; font-weight: bold; text-shadow: 0 0 5px #0f0; }
+        
+        @keyframes breathe { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.8; } }
+        .flicker { animation: flash-red 0.15s infinite; }
+        @keyframes flash-red { 0% { opacity: 1; } 50% { opacity: 0.5; } }
     </style>
 </head>
 <body>
+    <div id="flash"></div>
     <div id="ui-container">
         <div class="stats">
             <h2 id="status-display">SYSTEM: STANDBY</h2>
             <p id="mode-display">MODE: IDLE</p>
         </div>
-        <div id="right-panel">
-            <div id="architect-view">
-                <p>PROJECT: WEBNITRIX</p>
-                <h2>ARCHITECT: SUDARSHANA MURTHY</h2>
-                <p>OS VER: 3.0.4.GOLDEN</p>
-            </div>
-            <div id="tactical-view" style="display: none;">
-                <p style="border-bottom: 1px solid #0f0; font-size: 0.7rem;">TACTICAL DATA</p>
-                <div class="label">POWER</div>
-                <div class="stat-bar-container"><div id="bar-power" class="stat-fill"></div></div>
-                <div class="label">SPEED</div>
-                <div class="stat-bar-container"><div id="bar-speed" class="stat-fill"></div></div>
-                <p id="alien-class" style="font-size: 0.6rem;"></p>
-            </div>
+
+        <div id="creator-info">
+            <p>PROJECT: WEBNITRIX</p>
+            <h2>ARCHITECT: SUDARSHANA MURTHY</h2>
+            <p>OS VER: 3.0.4.GOLDEN</p>
+            <p>GALVANIC TECHNOLOGY ENGINE</p>
         </div>
-        <div id="instruction-group">
-            <div style="font-weight:bold; letter-spacing:3px;">TAP CORE TO START</div>
-            <div style="font-size:0.7rem; opacity:0.7;">SWIPE OR SCROLL TO CYCLE</div>
-        </div>
+
+        <div id="prompt">INTERACT TO ACTIVATE</div>
         <div id="alien-label">HEATBLAST</div>
         <div id="timer-label">DNA STABILITY: 100%</div>
     </div>
@@ -78,118 +61,169 @@
     </script>
 
     <script type="module">
-        import * as THREE from 'three';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-        let active = false, transformed = false, index = 0, isScrolling = false;
-        let hologram, dial, touchStartY = 0;
+    let active = false, transformed = false, index = 0;
+    let hologram, dial, openSnd, transSnd, beepSnd;
 
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
-        scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-        const pL = new THREE.PointLight(0xffffff, 50); pL.position.set(2, 5, 2); scene.add(pL);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+    const pL = new THREE.PointLight(0xffffff, 60); pL.position.set(2, 5, 2); scene.add(pL);
 
-        const alienStats = [
-            { n: "HEATBLAST", p: 85, s: 60, c: "PYRONITE", t: './static/models/alien1.png' },
-            { n: "DIAMONDHEAD", p: 95, s: 40, c: "PETROSAPIEN", t: './static/models/alien2.png' },
-            { n: "FOUR ARMS", p: 100, s: 30, c: "TETRAMAND", t: './static/models/alien3.png' },
-            { n: "STINKFLY", p: 60, s: 85, c: "LEPIDOPTERRAN", t: './static/models/alien4.png' },
-            { n: "GREY MATTER", p: 15, s: 70, c: "GALVAN", t: './static/models/alien5.png' },
-            { n: "XLR8", p: 55, s: 100, c: "KINECELERAN", t: './static/models/alien6.png' },
-            { n: "WILDMUTT", p: 75, s: 85, c: "VULPIMANCER", t: './static/models/alien7.png' },
-            { n: "UPGRADE", p: 70, s: 65, c: "MECHAMORPH", t: './static/models/alien8.png' },
-            { n: "VERTEBRATE", p: 65, s: 90, c: "VULPIMANCER-V", t: './static/models/alien9.png' },
-            { n: "GHOSTFREAK", p: 65, s: 90, c: "ECTONURITE", t: './static/models/alien10.png' }
-        ];
+    const listener = new THREE.AudioListener(); camera.add(listener);
+    const loader = new THREE.AudioLoader();
+    openSnd = new THREE.Audio(listener); transSnd = new THREE.Audio(listener); beepSnd = new THREE.Audio(listener);
 
-        const texLoader = new THREE.TextureLoader();
-        hologram = new THREE.Sprite(new THREE.SpriteMaterial({ map: texLoader.load(alienStats[0].t), color: 0x00ff00, transparent: true, opacity: 0 }));
-        hologram.scale.set(1.6, 1.6, 1); hologram.position.y = 1.8; scene.add(hologram);
+    loader.load('./static/sounds/opening.mp3', b => openSnd.setBuffer(b));
+    loader.load('./static/sounds/transform.mp3', b => transSnd.setBuffer(b));
+    loader.load('./static/sounds/timer.mp3', b => beepSnd.setBuffer(b));
 
-        new GLTFLoader().load('./static/models/omnitrix.glb', (g) => {
-            scene.add(g.scene);
-            g.scene.traverse(n => { if(n.name.toLowerCase().includes("dial")) dial = n; });
-            camera.position.set(0, 2, 5); camera.lookAt(0,0,0);
-        });
+    // SOUND: MECHANICAL SCROLL
+    function playMechanicalClick() {
+    const ctx = listener.context;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
 
-        function changeAlien(dir) {
-            if (isScrolling) return; // Prevent skipping
-            isScrolling = true;
+    // 1. SINE WAVE: The smoothest sound possible (no sharp edges)
+    osc.type = 'sine';
+
+    // 2. SOFT FILTER: Removes the "bullet" sharpness
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(2000, ctx.currentTime);
+
+    // 3. GLIDE: A gentle "bloop" instead of a "crack"
+    // Starts at 800Hz (musical) and drops to 400Hz
+    osc.frequency.setValueAtTime(800, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.1);
+
+    // 4. SOFT ENVELOPE: Fades out smoothly
+    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.1);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    osc.stop(ctx.currentTime + 0.1);
+}
+
+    // NEW: SYNTHETIC DISCHARGE PULSE
+    // This creates that "Emergency Power" warble
+    function playDischargeWarning() {
+        const ctx = listener.context;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        
+        osc.type = 'square'; // Sharper, more "electric" sound
+        osc.frequency.setValueAtTime(100, ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(200, ctx.currentTime + 0.2);
+        
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+        
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(); osc.stop(ctx.currentTime + 0.3);
+    }
+
+    const texLoader = new THREE.TextureLoader();
+    const aliens = [
+        { n: "HEATBLAST", t: texLoader.load('./static/models/alien1.png') },
+        { n: "DIAMONDHEAD", t: texLoader.load('./static/models/alien2.png') },
+        { n: "XLR8", t: texLoader.load('./static/models/alien6.png') },
+        { n: "FOUR ARMS", t: texLoader.load('./static/models/alien3.png') },
+        { n: "GREY MATTER", t: texLoader.load('./static/models/alien5.png') }
+    ];
+
+    hologram = new THREE.Sprite(new THREE.SpriteMaterial({ map: aliens[0].t, color: 0x00ff00, transparent: true, opacity: 0 }));
+    hologram.scale.set(1.6, 1.6, 1); hologram.position.y = 1.8; scene.add(hologram);
+
+    new GLTFLoader().load('./static/models/omnitrix.glb', (g) => {
+        scene.add(g.scene);
+        g.scene.traverse(n => { if(n.name.toLowerCase().includes("dial")) dial = n; });
+        camera.position.set(0, 2, 5); camera.lookAt(0,0,0);
+    });
+
+    function updateUI(color, status, mode) {
+        const c = "#" + color.toString(16).padStart(6, '0');
+        document.getElementById('ui-container').style.color = c;
+        document.getElementById('status-display').innerText = `SYSTEM: ${status}`;
+        document.getElementById('mode-display').innerText = `MODE: ${mode}`;
+        hologram.material.color.setHex(color);
+        document.getElementById('creator-info').style.color = c;
+        document.getElementById('creator-info').style.borderColor = c;
+    }
+
+    window.addEventListener('click', () => {
+        if (transformed) return;
+        if (!active) {
+            active = true;
+            if(openSnd.buffer) openSnd.play();
+            updateUI(0x00ff00, "ACTIVE", "SELECTION");
+            document.getElementById('alien-label').style.opacity = 1;
+            document.getElementById('prompt').style.display = "none";
+            hologram.material.opacity = 0.8;
+        } else {
+            transformed = true;
+            const flash = document.getElementById('flash');
+            flash.style.opacity = 1;
+            if(transSnd.buffer) transSnd.play();
+            setTimeout(() => { flash.style.opacity = 0; startTimer(); }, 150);
+        }
+    });
+
+    window.addEventListener('wheel', () => {
+        if (active && !transformed) {
+            playMechanicalClick();
+            index = (index + 1) % aliens.length;
+            hologram.material.map = aliens[index].t;
+            document.getElementById('alien-label').innerText = aliens[index].n;
+            if(dial) dial.rotation.y += 0.4;
+        }
+    });
+
+    function startTimer() {
+        let time = 10;
+        document.getElementById('timer-label').style.opacity = 1;
+        updateUI(0x00ff00, "ACTIVE", "TRANSFORMED");
+
+        const count = setInterval(() => {
+            time--;
+            document.getElementById('timer-label').innerText = `DNA STABILITY: ${time * 10}%`;
+
+            if (time === 5) updateUI(0xffff00, "WARNING", "LOW POWER");
             
-            if (dir === 'next') index = (index + 1) % alienStats.length;
-            else index = (index - 1 + alienStats.length) % alienStats.length;
-
-            hologram.material.map = texLoader.load(alienStats[index].t);
-            document.getElementById('alien-label').innerText = alienStats[index].n;
-            document.getElementById('bar-power').style.width = alienStats[index].p + "%";
-            document.getElementById('bar-speed').style.width = alienStats[index].s + "%";
-            document.getElementById('alien-class').innerText = `CLASS: ${alienStats[index].c}`;
-            if(dial) dial.rotation.y += (dir === 'next' ? 0.4 : -0.4);
-
-            setTimeout(() => { isScrolling = false; }, 200); // 200ms delay to stop skipping
-        }
-
-        // LAPTOP SCROLL (With Debounce)
-        window.addEventListener('wheel', (e) => { 
-            if (active && !transformed) changeAlien(e.deltaY > 0 ? 'next' : 'prev'); 
-        }, { passive: true });
-
-        // MOBILE TOUCH (Unified Swipe & Click)
-        window.addEventListener('touchstart', (e) => { 
-            touchStartY = e.touches[0].clientY; 
-        }, { passive: true });
-
-        window.addEventListener('touchend', (e) => {
-            let touchEndY = e.changedTouches[0].clientY;
-            let diff = touchStartY - touchEndY;
-
-            if (Math.abs(diff) < 10) { // It's a Tap
-                if (transformed) return;
-                if (!active) {
-                    active = true;
-                    document.getElementById('status-display').innerText = "SYSTEM: ACTIVE";
-                    document.getElementById('architect-view').style.display = 'none';
-                    document.getElementById('tactical-view').style.display = 'block';
-                    document.getElementById('alien-label').style.opacity = 1;
-                    document.getElementById('instruction-group').style.display = "none";
-                    hologram.material.opacity = 0.8;
-                } else {
-                    transformed = true;
-                    document.getElementById('timer-label').style.opacity = 1;
-                }
-            } else if (active && !transformed && Math.abs(diff) > 40) { // It's a Swipe
-                changeAlien(diff > 0 ? 'next' : 'prev');
+            if (time <= 3 && time > 0) {
+                updateUI(0xff0000, "CRITICAL", "DISCHARGING");
+                document.getElementById('ui-container').classList.add('flicker');
+                
+                // Play the built-in timer sound
+                if(beepSnd.buffer && !beepSnd.isPlaying) beepSnd.play();
+                // Layer it with the synthetic mechanical discharge pulse
+                playDischargeWarning();
             }
-        }, { passive: true });
 
-        // Desktop Click
-        window.addEventListener('mousedown', () => {
-            if (window.innerWidth > 600) { // Only trigger on desktop click
-                if (!active) {
-                    active = true;
-                    document.getElementById('status-display').innerText = "SYSTEM: ACTIVE";
-                    document.getElementById('architect-view').style.display = 'none';
-                    document.getElementById('tactical-view').style.display = 'block';
-                    document.getElementById('alien-label').style.opacity = 1;
-                    document.getElementById('instruction-group').style.display = "none";
-                    hologram.material.opacity = 0.8;
-                } else if (!transformed) {
-                    transformed = true;
-                    document.getElementById('timer-label').style.opacity = 1;
-                }
+            if (time <= 0) { 
+                clearInterval(count); 
+                updateUI(0xff0000, "SHUTDOWN", "RECHARGING");
+                setTimeout(() => location.reload(), 1200); 
             }
-        });
+        }, 1000);
+    }
 
-        function animate() {
-            requestAnimationFrame(animate);
-            if(active && !transformed) hologram.position.y = 1.8 + Math.sin(Date.now()*0.003)*0.05;
-            renderer.render(scene, camera);
-        }
-        animate();
-    </script>
+    function animate() {
+        requestAnimationFrame(animate);
+        if(active && !transformed) hologram.position.y = 1.8 + Math.sin(Date.now()*0.003)*0.05;
+        renderer.render(scene, camera);
+    }
+    animate();
+</script>
 </body>
 </html>
